@@ -483,27 +483,55 @@ function drawOverlay(title, subtitle) {
 }
 
 function draw() {
-  // 背景 - 用亮色确保可见
+  // 背景
   ctx.fillStyle='#1a1a1a';
   ctx.fillRect(0,0,W,H);
 
-  // 网格
-  ctx.strokeStyle='#252525';
-  ctx.lineWidth=0.5;
-  for (var x=0; x<=W; x+=TILE) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-  for (var y=0; y<=H; y+=TILE) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  if (state===PLAY) {
+    // ---- 游戏中 ----
+    // 网格
+    ctx.strokeStyle='#252525';
+    ctx.lineWidth=0.5;
+    for (var x=0; x<=W; x+=TILE) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (var y=0; y<=H; y+=TILE) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
 
-  drawMap();
+    drawMap();
 
-  // 游戏对象
-  for (var i=0; i<bullets.length; i++) bullets[i].draw();
-  if (player) player.draw();
-  for (var i=0; i<enemies.length; i++) enemies[i].draw();
-  for (var i=0; i<parts.length; i++) parts[i].draw();
+    // 坦克
+    if (player && player.alive) {
+      player.draw();
+      // 画一个大光圈标记玩家位置
+      ctx.strokeStyle = 'rgba(0,255,0,0.6)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(player.x+19.5, player.y+19.5, 30, 0, Math.PI*2);
+      ctx.stroke();
+    }
+    for (var i=0; i<enemies.length; i++) {
+      if (enemies[i].alive) {
+        enemies[i].draw();
+        // 画光圈标记敌人
+        ctx.strokeStyle = 'rgba(255,0,0,0.6)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(enemies[i].x+19.5, enemies[i].y+19.5, 30, 0, Math.PI*2);
+        ctx.stroke();
+      }
+    }
 
-  // 状态覆盖层
-  if (state===MENU) drawMenu();
-  else if (state===OVER) {
+    // 子弹和粒子
+    for (var i=0; i<bullets.length; i++) bullets[i].draw();
+    for (var i=0; i<parts.length; i++) parts[i].draw();
+
+    // 左上角状态
+    ctx.fillStyle = '#0f0';
+    ctx.font = 'bold 14px "Courier New",monospace';
+    ctx.fillText('PLAYER:('+Math.floor(player.x)+','+Math.floor(player.y)+') ENEMIES:'+enemies.length+' SCORE:'+score, 10, 20);
+
+    draw._wt = null;
+  } else if (state===MENU) {
+    drawMenu();
+  } else if (state===OVER) {
     drawOverlay('GAME OVER', '最终得分: '+score);
     var a=0.5+0.5*Math.sin(Date.now()/400);
     ctx.textAlign='center';
@@ -513,18 +541,9 @@ function draw() {
     ctx.textAlign='start';
   } else if (state===WIN) {
     drawOverlay('恭喜过关!', '得分: '+score+'    第'+(level+1)+'关即将开始...');
-    // 2秒后自动进入下一关
     if (!draw._wt) draw._wt=Date.now();
     if (Date.now()-draw._wt>2000) {
       draw._wt=null; nextLevel(); state=PLAY; updateUI();
-    }
-  } else {
-    draw._wt=null;
-    // 游戏中显示调试
-    if (player&&player.alive) {
-      ctx.fillStyle='rgba(255,255,255,0.3)';
-      ctx.font='11px "Courier New",monospace';
-      ctx.fillText('T:'+enemies.length+' S:'+score,8,H-8);
     }
   }
 }
