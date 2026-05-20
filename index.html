@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>坦克大战</title>
+<title>HAMA坦克大战</title>
 <style>
   body { margin:0; background:#000; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; font-family:'Microsoft YaHei',sans-serif; }
   canvas { border:2px solid #4a4; }
@@ -178,6 +178,12 @@ Tank.prototype.draw = function() {
   // 炮管
   ctx.fillStyle='#ccc';
   ctx.fillRect(-3,-20,6,12);
+  // HAMA 标签
+  ctx.fillStyle='#fff';
+  ctx.font='bold 7px "Courier New",monospace';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText('HAMA',0,2);
   ctx.restore();
 };
 
@@ -440,11 +446,11 @@ function drawMenu() {
   ctx.fillStyle='#0f0';
   ctx.font='bold 52px "Microsoft YaHei",sans-serif';
   ctx.shadowColor='#0f0'; ctx.shadowBlur=20;
-  ctx.fillText('坦克大战',W/2,H/2-70);
+  ctx.fillText('HAMA坦克大战',W/2,H/2-70);
   ctx.shadowBlur=0;
   ctx.fillStyle='#aaa';
   ctx.font='18px "Courier New",monospace';
-  ctx.fillText('TANK BATTLE',W/2,H/2-25);
+  ctx.fillText('HAMA TANK BATTLE',W/2,H/2-25);
   var alpha=0.5+0.5*Math.sin(Date.now()/400);
   ctx.fillStyle='rgba(0,255,0,'+alpha+')';
   ctx.font='bold 20px "Microsoft YaHei",sans-serif';
@@ -464,6 +470,9 @@ function drawMiniTank(x,y,angle,color) {
   ctx.fillStyle='#1a1a1a'; ctx.fillRect(-12,-10,3,20); ctx.fillRect(9,-10,3,20);
   ctx.fillStyle=color; ctx.fillRect(-9,-8,18,18);
   ctx.fillStyle='#ccc'; ctx.fillRect(-2,-14,4,8);
+  ctx.fillStyle='#fff'; ctx.font='bold 5px "Courier New",monospace';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('HAMA',0,1);
   ctx.restore();
 }
 
@@ -526,7 +535,7 @@ function draw() {
     // 左上角状态
     ctx.fillStyle = '#0f0';
     ctx.font = 'bold 14px "Courier New",monospace';
-    ctx.fillText('PLAYER:('+Math.floor(player.x)+','+Math.floor(player.y)+') ENEMIES:'+enemies.length+' SCORE:'+score, 10, 20);
+    ctx.fillText('HAMA:('+Math.floor(player.x)+','+Math.floor(player.y)+') ENEMIES:'+enemies.length+' SCORE:'+score, 10, 20);
 
     draw._wt = null;
   } else if (state===MENU) {

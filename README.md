@@ -1,6 +1,6 @@
-# 坦克大战 (Tank Battle)
+# HAMA坦克大战
 
-一个用纯 HTML5 Canvas 实现的经典坦克大战游戏。
+HAMA 定制版坦克大战，纯 HTML5 Canvas 实现。
 
 ## 玩法
 
